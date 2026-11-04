@@ -1,0 +1,267 @@
+/* ==========================================================
+   自己投資レシート ― 共通CSS（v0.6 レシート印字風）
+   準拠：[s-design] Design System v0.2（匿名版）。Web 向けの寸法は v2.0 の Web 設計を引き継ぐ【派生】
+   例外（指示による）：面の塗りは使わない。文字は ink または navy-800 のみ。罫線は ink または navy
+   ルール：色・余白・書体は :root の変数だけで変更する。直接の値を書かない。
+   ========================================================== */
+
+:root {
+  /* color：白地に、黒と紺の印字だけ */
+  --navy-900: #03214E;
+  --navy-800: #13294B;
+  --ink:      #111827;
+  --white:    #FFFFFF;
+
+  /* font */
+  --font-sans:  "游ゴシック体", "Yu Gothic", "ヒラギノ角ゴシック", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-cover: "ヒラギノ角ゴシック", "Hiragino Sans", "游ゴシック体", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-mono:  "SFMono-Regular", "Menlo", "Consolas", "Noto Sans Mono", "Courier New", monospace; /* 金額・数字のみ */
+
+  /* space (px) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px;
+
+  /* layout */
+  --container: 1080px;
+  --measure: 720px;
+  --paper: 380px;   /* レシート紙の幅 */
+}
+
+/* ---------- base ---------- */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--white); color: var(--ink);
+  font: 400 16px/1.8 var(--font-sans);
+  line-break: strict; word-break: normal; text-align: left;
+}
+.container { max-width: var(--container); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 1024px) { .container { padding: 0 24px; } }
+.prose { max-width: var(--measure); }
+
+.mono, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+td.num, th.num { text-align: right; }
+
+.eyebrow { font: 700 13px/1.4 var(--font-sans); color: var(--navy-800); margin: 0 0 var(--space-2); }
+h1 { font: 700 28px/1.3 var(--font-sans); color: var(--ink); margin: 0 0 var(--space-3);
+     padding-bottom: var(--space-3); border-bottom: 1px solid var(--ink); }
+h2 { font: 700 20px/1.3 var(--font-sans); color: var(--navy-800); margin: var(--space-7) 0 var(--space-3); }
+h3 { font: 700 17px/1.3 var(--font-sans); color: var(--navy-800); margin: var(--space-5) 0 var(--space-2); }
+p, ul, ol { margin: 0 0 var(--space-4); }
+.note { font: 400 13px/1.7 var(--font-sans); color: var(--ink); }
+
+/* 強調：紺の太字のみ */
+.em { font-weight: 700; color: var(--navy-800); }
+
+ul.dash { list-style: none; padding-left: 19px; }
+ul.dash > li { position: relative; }
+ul.dash > li::before { content: "-"; position: absolute; left: -19px; font-weight: 700; color: var(--navy-800); }
+
+a { color: var(--navy-800); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--navy-800); outline-offset: 2px; }
+
+.btn { display: inline-block; padding: 12px 24px; border: 2px solid var(--navy-800); background: var(--white);
+       color: var(--navy-800); font: 700 16px/1.2 var(--font-sans); text-decoration: none; cursor: pointer; }
+.btn:hover { border-style: dashed; }
+
+/* 表：塗りなし。ヘッダーは太字＋下に実線 */
+table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--white); }
+th { color: var(--ink); font-weight: 700; text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--ink); }
+td { padding: 6px 8px; border-bottom: 1px dashed var(--ink); vertical-align: top; }
+th[scope="row"] { border-bottom: 1px dashed var(--ink); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ---------- site shell ---------- */
+/* ヘッダーは置かない。ロゴ・マーク類も置かない */
+.site-footer { font: 400 13px/1.6 var(--font-sans); color: var(--ink); border-top: 1px dashed var(--ink); padding: var(--space-4) 0; margin-top: var(--space-7); }
+
+.hero { padding: var(--space-5) 0 var(--space-4); }
+.user-line { font: 700 16px/1.6 var(--font-sans); color: var(--ink); margin: 0 0 var(--space-2); }
+.hero h1 { font-family: var(--font-cover); font-size: 28px; border-bottom: 0; padding-bottom: 0; }
+@media (min-width: 1024px) { .hero h1 { font-size: 40px; } }
+.hero p { max-width: var(--measure); color: var(--ink); }
+
+/* 期間・画面タブ：下線だけ */
+.period { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--ink); margin: var(--space-4) 0 var(--space-3); }
+.period a { text-decoration: none; font-weight: 400; color: var(--ink); padding: 8px 16px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.period a[aria-current="true"] { color: var(--navy-800); font-weight: 700; border-bottom-color: var(--navy-800); }
+
+/* ---------- 状態スタンプ：枠線だけ（取得済み＝太枠、ほかは細枠） ---------- */
+.stamp { display: inline-block; min-width: 52px; padding: 2px 8px; text-align: center; font: 700 12px/1.4 var(--font-sans);
+         background: var(--white); color: var(--navy-800); border: 1px solid var(--navy-800); }
+.stamp--must { border-width: 3px; padding: 0 6px; }
+.stamp--want, .stamp--open { border-width: 1px; }
+
+/* ---------- B04 主張帯：枠線と太字だけ ---------- */
+.b04 { display: grid; grid-template-columns: minmax(96px, 17.5%) 1fr; margin: 24px 0; border: 2px solid var(--navy-800); }
+.b04-label { font: 700 13px/1.4 var(--font-sans); color: var(--navy-800); padding: 12px; display: flex; align-items: center; border-right: 1px dashed var(--navy-800); }
+.b04-body { margin: 0; font: 700 14px/1.6 var(--font-sans); color: var(--navy-800); padding: 12px 16px; display: flex; align-items: center; }
+@media (max-width: 640px) { .b04 { grid-template-columns: 1fr; } .b04-label { border-right: 0; border-bottom: 1px dashed var(--navy-800); } }
+
+/* ---------- B05 効果カード：枠線だけ。主役は太枠 ---------- */
+.b05 { display: grid; gap: 8px; margin: 24px 0; }
+@media (min-width: 1024px) { .b05--row { grid-template-columns: repeat(3, 1fr); } }
+.b05-card { display: grid; grid-template-columns: minmax(130px, 45%) 1fr; align-items: center; gap: 16px;
+            border: 1px dashed var(--ink); padding: 8px 14px; min-height: 61px; }
+.b05-card small { display: block; font: 400 11px/1.4 var(--font-sans); color: var(--ink); }
+.b05-card strong { display: block; font: 700 24px/1.2 var(--font-mono); color: var(--navy-800); }
+.b05-card p { margin: 0; font: 400 13px/1.6 var(--font-sans); }
+.b05-card--lead { border: 3px solid var(--navy-800); }
+@media (max-width: 640px) { .b05-card { grid-template-columns: 1fr; gap: 4px; } }
+
+/* ---------- B06 比較表：強調列は左右の太線 ---------- */
+.b06 th:first-child, .b06 th[scope="row"] { width: 110px; }
+.b06 th.b06-em { color: var(--navy-800); border-left: 3px solid var(--navy-800); border-right: 3px solid var(--navy-800); border-top: 3px solid var(--navy-800); }
+.b06 td.b06-em { color: var(--navy-800); font-weight: 700; border-left: 3px solid var(--navy-800); border-right: 3px solid var(--navy-800); }
+.b06 tr:last-child td.b06-em { border-bottom: 3px solid var(--navy-800); }
+
+/* ---------- B07 コールアウト：破線の枠 ---------- */
+.b07 { margin: 24px 0; padding: 11px 16px; border: 1px dashed var(--ink); }
+.b07 p { margin: 0; font: 400 13px/1.7 var(--font-sans); }
+.b07 .b07-head { font: 700 13px/1.5 var(--font-sans); margin-bottom: 4px; }
+.b07 small { font: 700 12px/1 var(--font-sans); margin-right: 6px; color: var(--navy-800); }
+
+/* ---------- B11 横棒グラフ：白抜き棒、最大は斜線 ---------- */
+.b11-row { display: grid; grid-template-columns: minmax(120px, 4fr) 5.5fr auto; align-items: center; gap: 16px; margin: 10px 0; }
+.b11-label strong { display: block; font: 700 14px/1.4 var(--font-sans); }
+.b11-label small { font: 400 11px/1.5 var(--font-sans); color: var(--ink); }
+.b11-track { height: 24px; }
+.b11-bar { height: 100%; width: calc(var(--v) / var(--max) * 100%); background: var(--white); border: 2px solid var(--ink); }
+.b11-bar--fill { background: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, var(--white) 1.5px 5px); }
+.b11-value { font: 700 14px/1 var(--font-mono); color: var(--navy-800); min-width: 72px; text-align: right; }
+@media (max-width: 640px) { .b11-row { grid-template-columns: 1fr auto; } .b11-track { grid-column: 1 / -1; grid-row: 2; } }
+
+/* ==========================================================
+   レシート紙（サーマル印字風）
+   紙：白地、左右は実線、上下は細かいギザギザの切り口（SVGの形のみ）
+   ========================================================== */
+.receipt { position: relative; background: var(--white); border-left: 1px solid var(--ink); border-right: 1px solid var(--ink);
+           padding: 28px 22px; margin: 16px auto; max-width: var(--paper); }
+.receipt::before, .receipt::after { content: ""; position: absolute; left: -1px; right: -1px; height: 8px; background-repeat: repeat-x; background-size: 12px 8px; }
+.receipt::before { top: -7px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpolygon points='0,8 6,1 12,8' fill='white'/%3E%3Cpolyline points='0,8 6,1 12,8' fill='none' stroke='%23111827' stroke-width='1'/%3E%3C/svg%3E"); }
+.receipt::after  { bottom: -7px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpolygon points='0,0 6,7 12,0' fill='white'/%3E%3Cpolyline points='0,0 6,7 12,0' fill='none' stroke='%23111827' stroke-width='1'/%3E%3C/svg%3E"); }
+.receipt-user { font: 700 12px/1.4 var(--font-sans); color: var(--ink); margin: 0 0 4px; }
+.receipt-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+.receipt-no { font: 700 12px/1.4 var(--font-mono); color: var(--ink); margin: 0; }
+.receipt-store { text-align: center; margin: 8px 0 4px; }
+.receipt-store h2, .receipt h2 { font: 700 24px/1.3 var(--font-sans); color: var(--navy-800); margin: 0; }
+.receipt-store p { margin: 2px 0 0; font: 400 13px/1.6 var(--font-sans); }
+.receipt-center { text-align: center; }
+.rsep { border: 0; border-top: 1px dashed var(--ink); margin: 14px 0; }
+.rsep--solid { border-top-style: solid; }
+.rlabel { font: 700 12px/1.4 var(--font-sans); color: var(--navy-800); margin: 0 0 6px; }
+.rline { display: flex; align-items: baseline; gap: 8px; font-size: 14px; line-height: 1.7; margin: 0; }
+.rline .rdots { flex: 1; border-bottom: 1px dotted var(--ink); min-width: 12px; transform: translateY(-4px); }
+.rline .rprice { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+.rline .rsub { font-size: 12px; }
+.rline--sub { padding-left: 12px; font-size: 13px; }
+.rtotal { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 4px; padding: 8px 0;
+          border-top: 3px double var(--navy-800); border-bottom: 3px double var(--navy-800); color: var(--navy-800); }
+.rtotal span { font: 700 16px/1.4 var(--font-sans); letter-spacing: 0.3em; }
+.rtotal strong { font: 700 26px/1.2 var(--font-mono); }
+.rchange { border: 1px dashed var(--navy-800); padding: 10px 14px; margin-top: 10px; text-align: center; color: var(--navy-800); }
+.rchange small { display: block; font: 400 12px/1.4 var(--font-sans); color: var(--ink); }
+.rchange strong { font: 700 20px/1.4 var(--font-mono); }
+.rchange p { margin: 4px 0 0; font-size: 12px; line-height: 1.6; color: var(--ink); }
+.rthanks { text-align: center; font: 400 13px/1.7 var(--font-sans); margin: 12px 0 0; }
+.rmemo { font-size: 13px; line-height: 1.8; margin: 0; }
+.revidence { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.revidence div { aspect-ratio: 4 / 3; border: 1px dashed var(--ink); display: grid; place-items: center; text-align: center; font-size: 11px; line-height: 1.4; padding: 4px; }
+
+/* 月次一覧のレシートカード */
+.receipt-grid { display: grid; gap: 24px 16px; grid-template-columns: 1fr; }
+@media (min-width: 640px)  { .receipt-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .receipt-grid { grid-template-columns: repeat(4, 1fr); } }
+.rcard { position: relative; display: flex; flex-direction: column; background: var(--white); border-left: 1px solid var(--ink); border-right: 1px solid var(--ink);
+         border-top: 1px solid var(--ink); padding: 16px 16px 20px; text-decoration: none; color: var(--ink); font-weight: 400; margin-bottom: 8px; }
+.rcard::after { content: ""; position: absolute; left: -1px; right: -1px; bottom: -7px; height: 8px; background-repeat: repeat-x; background-size: 12px 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpolygon points='0,0 6,7 12,0' fill='white'/%3E%3Cpolyline points='0,0 6,7 12,0' fill='none' stroke='%23111827' stroke-width='1'/%3E%3C/svg%3E"); }
+.rcard:hover { background: var(--white); outline: 1px dashed var(--navy-800); outline-offset: 4px; }
+.rcard:focus-visible { outline: 3px solid var(--navy-800); outline-offset: 4px; }
+.rcard h3 { margin: 6px 0 6px; font: 700 16px/1.4 var(--font-sans); color: var(--navy-800); text-align: center; }
+.rcard .rcard-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.rcard .receipt-no { font-size: 11px; }
+.rcard .rcard-amount { font: 700 24px/1.2 var(--font-mono); color: var(--navy-800); margin: 4px 0 8px; text-align: center; border-top: 3px double var(--navy-800); border-bottom: 3px double var(--navy-800); padding: 6px 0; }
+.rcard .rcard-row { display: flex; justify-content: space-between; font-size: 13px; margin: 0; }
+.rcard .rcard-row span:last-child { font-family: var(--font-mono); }
+.rcard .rcard-foot { margin: auto 0 0; padding-top: 12px; border-top: 1px dashed var(--ink); font-size: 13px; text-align: center; }
+
+/* レシート画面：紙は細い１列で中央、詳細はその下 */
+.receipt-detail { max-width: var(--measure); margin: var(--space-7) auto 0; }
+.receipt-detail h2:first-child { margin-top: 0; }
+.reflect { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .reflect { grid-template-columns: 1fr 1fr; } }
+.reflect-box { padding: 12px 16px; border: 1px solid var(--ink); }
+.reflect-box p { margin: 0; font-size: 14px; line-height: 1.8; }
+.reflect-box .rlabel { margin-bottom: 4px; }
+.reflect-raw { border-style: dashed; }
+.reflect-fix { border: 2px solid var(--navy-800); }
+.evidence { display: grid; gap: 8px; grid-template-columns: repeat(2, 1fr); }
+.evidence figure { margin: 0; }
+.evidence .ph { aspect-ratio: 4 / 3; border: 1px dashed var(--ink); display: grid; place-items: center; text-align: center; font-size: 13px; padding: 8px; }
+.evidence figcaption { font-size: 12px; margin-top: 4px; }
+
+/* ==========================================================
+   冊子ビュー（A5）
+   画面：ページを縦に並べる ／ 印刷：1ページ＝A5 1枚
+   ========================================================== */
+.book { display: grid; gap: 24px; justify-content: center; padding: 24px 0; }
+.page { width: 148mm; min-height: 210mm; background: var(--white); border: 1px solid var(--ink);
+        padding: 14mm; position: relative; display: flex; flex-direction: column; font-size: 9pt; line-height: 1.7; }
+.page h1 { font-size: 15pt; padding-bottom: 6px; margin-bottom: 10px; }
+.page h2 { font-size: 11pt; margin: 16px 0 6px; }
+.page h3 { font-size: 10pt; margin: 12px 0 4px; }
+.page p { font-size: 9pt; margin: 0 0 8px; }
+.page table { font-size: 8pt; }
+.page th, .page td { padding: 4px 6px; }
+.page .b05 { margin: 12px 0; gap: 6px; }
+.page .b05-card { grid-template-columns: 1fr; gap: 2px; padding: 6px 10px; min-height: 0; }
+.page .b05-card strong { font-size: 16pt; }
+.page .b05-card small { font-size: 7pt; }
+.page .b05-card p { font-size: 8pt; }
+.page .b11-row { gap: 8px; margin: 4px 0; grid-template-columns: 54px 1fr 72px; }
+.page .b11-track { height: 14px; }
+.page .b11-label strong { font-size: 8pt; }
+.page .b11-value { font-size: 8pt; min-width: 0; }
+.page .receipt { max-width: none; padding: 14px 14px; margin: 14px 4px 18px; }
+.page .receipt .rtotal strong { font-size: 16pt; }
+.page .receipt .rtotal span { font-size: 10pt; }
+.page-foot { margin-top: auto; padding-top: 8px; display: flex; justify-content: space-between; border-top: 0.5pt solid var(--ink); font: 400 7pt/1.4 var(--font-sans); color: var(--ink); }
+.page-no { font-family: var(--font-mono); }
+
+/* 表紙：太罫線（縦・横）は navy-900。ロゴ・著作権・ページ番号は置かない */
+.page--cover { border: 0; padding: 0; font-family: var(--font-cover); }
+.cover-frame { flex: 1; position: relative; border-top: 2.25pt solid var(--navy-900); border-bottom: 2.25pt solid var(--navy-900);
+               margin: 14mm 0; padding: 0 16mm; display: flex; flex-direction: column; justify-content: center; }
+.page--cover::before, .page--cover::after { content: ""; position: absolute; top: 0; bottom: 0; width: 0; border-left: 2.25pt solid var(--navy-900); }
+.page--cover::before { left: 6mm; } .page--cover::after { right: 6mm; }
+.cover-frame .eyebrow { font-family: var(--font-cover); font-size: 9pt; }
+.cover-title { font: 700 26pt/1.3 var(--font-cover); color: var(--ink); margin: 0; border: 0; padding: 0; }
+.cover-sub { font: 400 11pt/1.6 var(--font-cover); margin: 14px 0 6px; }
+.cover-meta { font: 400 9pt/1.6 var(--font-cover); margin: 0; }
+.cover-name { position: absolute; right: 16mm; bottom: 8mm; font: 700 18pt/1.2 var(--font-cover); color: var(--navy-800); }
+.cover-date { font: 400 9pt/1.6 var(--font-cover); margin: 14px 0 0; }
+
+.chapter { font: 700 8.5pt/1.4 var(--font-sans); color: var(--navy-800); margin: 0 0 4px; }
+.quote { margin: 0 0 10px; padding: 8px 10px; border-left: 2px solid var(--navy-800); }
+.quote p { margin: 0; }
+.quote .rlabel { margin-bottom: 2px; }
+
+@media screen and (max-width: 640px) {
+  .book { padding: 16px; }
+  .page { width: 100%; min-height: 0; padding: 20px; }
+  .page--cover { min-height: 420px; }
+  .cover-frame { padding: 0 24px; }
+}
+
+.print-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 12px 0; }
+.print-bar p { margin: 0; }
+
+@media print {
+  body { background: var(--white); }
+  .site-footer, .period, .print-bar, .no-print { display: none !important; }
+  .book { padding: 0; gap: 0; display: block; }
+  .page { border: 0; margin: 0; width: 148mm; height: 210mm; min-height: 0; break-after: page; page-break-after: always; overflow: hidden; }
+  @page { size: A5; margin: 0; }
+}
